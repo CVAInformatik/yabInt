@@ -85,7 +85,7 @@ class yabIntType
     inline bool  isEven() const { return ( yabInt.size() == 0) || ((yabInt[0] & 1) == 0);}
     
 		friend std::string _iToA(const yabIntType &a) ;
-    friend void Mersenne(const unsigned int N, yabIntType &a);
+                friend void Mersenne(const unsigned int N, yabIntType &a);
  		friend void DivRem(const yabIntType &a, const yabIntType &b, yabIntType &Qoutient, yabIntType &Rem );
 		friend void extendedGCD(const yabIntType &a, const yabIntType &b, yabIntType &gcd, yabIntType &am, yabIntType &bm  );
  		friend void GCD(const yabIntType &a, const yabIntType &b, yabIntType &gcd);
@@ -95,7 +95,7 @@ class yabIntType
 		friend void  yabIntPoke(std::vector<baseType> s, yabIntType& a);
 		/* Montgomery related friends */
 		friend void REDC(  const yabIntType &R, const yabIntType &N, const yabIntType &Ninv, yabIntType &a);
-    friend int  BitSize(const yabIntType &a);
+                friend int  BitSize(const yabIntType &a);
 			
 	private:
 
