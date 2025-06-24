@@ -519,11 +519,11 @@ function extended_gcd(a, b)
     
     while r ? 0 do
         quotient := old_r div r
-        (old_r, r) := (r, old_r - quotient × r)
-        (old_s, s) := (s, old_s - quotient × s)
-        (old_t, t) := (t, old_t - quotient × t)
+        (old_r, r) := (r, old_r - quotient Ã— r)
+        (old_s, s) := (s, old_s - quotient Ã— s)
+        (old_t, t) := (t, old_t - quotient Ã— t)
     
-    output "Bézout coefficients:", (old_s, old_t)
+    output "BÃ©zout coefficients:", (old_s, old_t)
     output "greatest common divisor:", old_r
     output "quotients by the gcd:", (t, s)
 */
@@ -541,21 +541,21 @@ void extendedGCD(const yabIntType &a, const yabIntType &b, yabIntType &gcd, yabI
 		 yabIntType quotient ;
 		 yabIntType rem;
 		 DivRem( old_r, r, quotient, rem);
-		 { // (old_r, r) := (r, old_r - quotient × r)
+		 { // (old_r, r) := (r, old_r - quotient Ã— r)
 		 	  yabIntType temp_oldr(old_r);
 		 	  old_r = r;
 		 	  r *= quotient ;
 		 	  r.ChangeSign();
 		 	  r += temp_oldr;		 	  
 		 }
-		 { // (old_s, s) := (s, old_s - quotient × s)
+		 { // (old_s, s) := (s, old_s - quotient Ã— s)
 		 	 yabIntType temp_olds(old_s);
 		 	 old_s = s;
 		 	 s *= quotient;
 		 	 s.ChangeSign();
 		 	 s +=  temp_olds;
 		 }
-		 { //  (old_t, t) := (t, old_t - quotient × t)
+		 { //  (old_t, t) := (t, old_t - quotient Ã— t)
 		 	  yabIntType temp_oldt(old_t);
 		 	  old_t = t;
 		 	  t *= quotient;
@@ -733,78 +733,6 @@ int Jacobi(const yabIntType& a, const yabIntType& b)
 		}
 	}
 };
-
-#if 0
-
-yabIntType modmult(const yabIntType &_a, const yabIntType &_b, const yabIntType &mod) {  // Compute a*b % mod
-    yabIntType result;// = new pIntClass;
-    yabIntType a = _a;
-    yabIntType b = _b;
-    yabIntType quot; 
-    yabIntType rem;
-    while (!b.isZero()) {
-
-        if ((b[0] & 1) == 1) {
-            result += a;
-            DivRem(result, mod, quot, rem); result = rem;
-        }
-        a.Double();
-        DivRem(a, mod, quot, rem); 
-        a = rem;
-        b.DivPow2(1);
-    }
-    return result;
-}
-
-yabIntType  modpow(const yabIntType & _a, const yabIntType & _b, const yabIntType & mod) {  // Compute a^b % mod
-    yabIntType  result;
-    yabIntType   a = _a;
-    yabIntType   b = _b;
-    yabIntType  t;
-  //  yabIntType quot; 
-	//  yabIntType rem;
-
-    ++(result);// result = 1;
-#if 0
-    while (!b.isZero()) {
-        if ((b[0] & 1) == 1) {
-            t = modmult(result, a, mod);
-            result = t;
-        }
-        a = modmult(a, a, mod);
-        b.DivPow2(1);
-    }
-#else
-		baseType bb = 0;
-    for(int it = 0; it < (b.size()-1); it++){
-    	baseType ib = 1;
-    	bb = b[it];    	
-	    while(ib < yabIntType::UL){
-        if ((bb & ib) == 1) {
-            t = modmult(result, a, mod);
-            result = t;
-        }
-        a = modmult(a, a, mod);
-        ib = ib<<1 ;
-			}
-    }
-   	bb = b.back();
-   	while (bb){
-        if ((bb & 1) == 1) {
-            t = modmult(result, a, mod);
-            result = t;
-        }
-        a = modmult(a, a, mod);
-        bb = bb>>1;
-		}    
-#endif
-
-    return result;
-}
-#endif
-
-
-
 
 int Compare( const std::vector<baseType> &a, const std::vector<baseType> &b)
 {
