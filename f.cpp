@@ -113,7 +113,53 @@ std::vector<baseType> maskOff(unsigned int bits, const std::vector<baseType> &a)
 	  return res;
 }
 
-std::string fToA(const yabFloatType &a ){
+std::string Round( int _digits, std::string &in, std::string &frac )
+{
+	int digits = _digits ;
+	if( _digits < 0) digits = -digits ;
+		
+	if(frac.length() <= digits ) return in + "." + frac;
+	else {
+		int carry = 0;
+		std::string temp = frac.substr(0, digits+1);
+    switch (temp.back()){
+    	case '5': 
+    	case '6': 
+    	case '7':
+    	case '8':
+    	case '9': carry = 1; temp.pop_back(); break;
+    	default: temp.pop_back(); break;
+    };
+    while (temp.length() && carry ) {
+    	switch (temp.back()){
+    		case '9': carry = 1; temp.pop_back(); 
+    			break;    		
+    		default:  carry = 0; temp.back() = temp.back()+1 ; 
+    			break;    	
+    	}			
+    }
+    // back fill 
+    if( _digits < 0 )
+    	while (temp.length() < digits ) temp.push_back('0'); 
+    /* handle integer part */
+    for (std::string::reverse_iterator rit=in.rbegin(); rit!=in.rend(); ++rit)
+    {
+    	if( carry == 0) break;
+    	switch (*rit){
+    		case '9': carry = 1; *rit = '0'; 
+    			break;    		
+    		default:  carry = 0; *rit = *rit +1 ; 
+    			break;    	
+    	}			    	
+    }
+    /* integer part done */
+    if( temp.length() ) return in + "." + temp;
+    else return in;
+	}	    
+	return std::string("test");
+}	
+
+std::string fToA(const yabFloatType &a, int digits){
 	
 	static yabIntType intPart;
 	bool       neg = false ;
@@ -167,7 +213,7 @@ std::string fToA(const yabFloatType &a ){
         fraction.push_back( rawBits[dpos] + '0');    
   	}
   	if (fraction.length())
-	  	return in + "." + fraction;
+	  	return Round(digits, in, fraction);
 	  else
 	  	return in ;
 }

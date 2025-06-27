@@ -683,11 +683,44 @@ void testFloat(){
   yabFloatType e5(e1);
   yabFloatType f1("5");
   e5 *= f1;
-	std::cout << " e5 " << fToA(e5) << std::endl<< std::endl ;
+	std::cout << " e5 " << fToA(e5) << std::endl ;
+	std::cout << " e5 " << fToA(e5, -10) << std::endl ;
+	std::cout << " e5 " << fToA(e5,20) << std::endl ;
+	std::cout << " e5 " << fToA(e5,-20) << std::endl ;
+	std::cout << " e5 " << fToA(e5,30) << std::endl ;
+	std::cout << " e5 " << fToA(e5,-30) << std::endl ;
+	std::cout << " e5 " << fToA(e5,40) << std::endl<< std::endl ;
+	std::cout << " e5 " << fToA(e5,-40) << std::endl<< std::endl ;
+	for( int i = 1; i <50 ; i++){
+	std::cout << " e5 " << fToA(e5,i) << std::endl ;
+	std::cout << " e5 " << fToA(e5,-i) << std::endl ;
+	}	
+  yabFloatType f2("-5");
+
   yabFloatType e6(e2);
-  e6 *= f1;
-	std::cout << " e6 " << fToA(e6) << std::endl<< std::endl ;
-		
+  e6 *= f2;
+	for( int i = 0 ; i <60 ; i++){
+	std::cout << " e6 " << fToA(e6,i) << std::endl ;
+	std::cout << " e6 " << fToA(e6,-i) << std::endl ;
+	}	
+	
+  yabFloatType e7(e4);
+	std::cout << " e7 " << fToA(e7) << std::endl ;
+  e7 += e4;
+	std::cout << " e7 " << fToA(e7) << std::endl ;
+  e7 += e4;
+	std::cout << " e7 " << fToA(e7) << std::endl ;
+  e7 += e4;
+	std::cout << " e7 " << fToA(e7) << std::endl ;
+  e7 += e4;
+	std::cout << " e7 " << fToA(e7) << std::endl ;
+  e7 += e4;
+	std::cout << " e7 " << fToA(e7) << std::endl ;
+  e7 += e4;
+	std::cout << " e7 " << fToA(e7) << std::endl ;
+  e7 += e4;
+	std::cout << " e7 " << fToA(e7) << std::endl<< std::endl ;
+	
 	
 }
 
@@ -748,8 +781,8 @@ int main(int argc, char **argv)
 		//testMontgomery();		
 		//testModExponent();
 		//testModPow();
-		//testFloat();
-		testMersenne();
+		testFloat();
+		//testMersenne();
 
     
 	  return 0;

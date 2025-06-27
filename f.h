@@ -11,8 +11,25 @@
 */
 class yabFloatType;
 
-
-std::string fToA(const yabFloatType &a ) ; 
+/*
+    the digits paramater control number of digits after the decimal point
+    AND the format, 
+    digits = n  ( n >= 0)  gives from 0 to n decimal digits
+    digits = -n gives always n decimal digits, with 0 padding if necessary
+    
+    Rounding is "towards nearest integer"   
+    
+        5.76 rounded to 1 digit after the decimal point becomes 5.8
+        5.75 rounded to 1 digit after the decimal point becomes 5.8
+        5.74 rounded to 1 digit after the decimal point becomes 5.7
+        -5.76 rounded to 1 digit after the decimal point becomes -5.8
+        -5.75 rounded to 1 digit after the decimal point becomes -5.8
+        -5.74 rounded to 1 digit after the decimal point becomes -5.7
+     
+		(No particular reason for this choice, apart from convenience.)
+    
+*/
+std::string fToA(const yabFloatType &a, int digits = 10 ) ; 
 
 class yabFloatType
 {
@@ -72,7 +89,7 @@ public:
 		                 return *this;
 	};
 	
-	friend std::string fToA(const yabFloatType &a ) ; 
+	friend std::string fToA(const yabFloatType &a, int digits ) ; 
 		
 private:
 	
