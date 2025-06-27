@@ -95,30 +95,25 @@ yabFloatType::yabFloatType(const char *s, unsigned int pf)
 }
 
 
-std::vector<baseType> maskOff(unsigned int bits, const std::vector<baseType> &a)
-{
-	  std::vector<baseType> res;
-	  	
-	  if ( bits > (a.size()* yabIntType::DIGITSIZE) ){
-	  	res = a;
-	  	while( bits > (res.size()* yabIntType::DIGITSIZE) ) 
-	  		res.push_back(0);
-	  }
-	  else {
-	  	
-	  	
-	  		
-	  }
-	  
-	  return res;
-}
-
 std::string Round( int _digits, std::string &in, std::string &frac )
 {
 	int digits = _digits ;
 	if( _digits < 0) digits = -digits ;
 		
-	if(frac.length() <= digits ) return in + "." + frac;
+	if(frac.length() < digits ) {
+		std::string temp = frac ;
+		
+    if( _digits < 0 ){
+    	if(temp.length() == 0)  temp = "." ;
+    	else temp = "." + frac;
+    			
+    	while (temp.length() < digits+1 ) temp.push_back('0'); 
+    }
+    else 
+    	if(temp.length() > 0) temp =  "." + frac;
+    	
+		return in + temp;
+	}
 	else {
 		int carry = 0;
 		std::string temp = frac.substr(0, digits+1);
@@ -212,8 +207,5 @@ std::string fToA(const yabFloatType &a, int digits){
         rawBits = yabIntPeek(frac)	;
         fraction.push_back( rawBits[dpos] + '0');    
   	}
-  	if (fraction.length())
-	  	return Round(digits, in, fraction);
-	  else
-	  	return in ;
+  	return Round(digits, in, fraction);
 }

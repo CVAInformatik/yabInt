@@ -706,20 +706,28 @@ void testFloat(){
 	
   yabFloatType e7(e4);
 	std::cout << " e7 " << fToA(e7) << std::endl ;
+	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
   e7 += e4;
 	std::cout << " e7 " << fToA(e7) << std::endl ;
+	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
   e7 += e4;
 	std::cout << " e7 " << fToA(e7) << std::endl ;
+	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
   e7 += e4;
 	std::cout << " e7 " << fToA(e7) << std::endl ;
+	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
   e7 += e4;
 	std::cout << " e7 " << fToA(e7) << std::endl ;
+	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
   e7 += e4;
 	std::cout << " e7 " << fToA(e7) << std::endl ;
+	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
   e7 += e4;
 	std::cout << " e7 " << fToA(e7) << std::endl ;
+	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
   e7 += e4;
 	std::cout << " e7 " << fToA(e7) << std::endl<< std::endl ;
+	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
 	
 	
 }
