@@ -137,7 +137,7 @@ void mul10e9(std::vector<baseType> &a){
 			
 		
 void dump(const std::vector<baseType> &a){
-		for(int i = a.size(); i> 0 ;i--) printf("%d: %08X,  ", i-1, a[i-1]);
+		for(int i = a.size(); i> 0 ;i--) printf("%08X ", a[i-1]);
 		printf("\n");
 }
 
@@ -519,11 +519,11 @@ function extended_gcd(a, b)
     
     while r ? 0 do
         quotient := old_r div r
-        (old_r, r) := (r, old_r - quotient Ã— r)
-        (old_s, s) := (s, old_s - quotient Ã— s)
-        (old_t, t) := (t, old_t - quotient Ã— t)
+        (old_r, r) := (r, old_r - quotient × r)
+        (old_s, s) := (s, old_s - quotient × s)
+        (old_t, t) := (t, old_t - quotient × t)
     
-    output "BÃ©zout coefficients:", (old_s, old_t)
+    output "Bézout coefficients:", (old_s, old_t)
     output "greatest common divisor:", old_r
     output "quotients by the gcd:", (t, s)
 */
@@ -541,21 +541,21 @@ void extendedGCD(const yabIntType &a, const yabIntType &b, yabIntType &gcd, yabI
 		 yabIntType quotient ;
 		 yabIntType rem;
 		 DivRem( old_r, r, quotient, rem);
-		 { // (old_r, r) := (r, old_r - quotient Ã— r)
+		 { // (old_r, r) := (r, old_r - quotient × r)
 		 	  yabIntType temp_oldr(old_r);
 		 	  old_r = r;
 		 	  r *= quotient ;
 		 	  r.ChangeSign();
 		 	  r += temp_oldr;		 	  
 		 }
-		 { // (old_s, s) := (s, old_s - quotient Ã— s)
+		 { // (old_s, s) := (s, old_s - quotient × s)
 		 	 yabIntType temp_olds(old_s);
 		 	 old_s = s;
 		 	 s *= quotient;
 		 	 s.ChangeSign();
 		 	 s +=  temp_olds;
 		 }
-		 { //  (old_t, t) := (t, old_t - quotient Ã— t)
+		 { //  (old_t, t) := (t, old_t - quotient × t)
 		 	  yabIntType temp_oldt(old_t);
 		 	  old_t = t;
 		 	  t *= quotient;
@@ -733,6 +733,7 @@ int Jacobi(const yabIntType& a, const yabIntType& b)
 		}
 	}
 };
+
 
 int Compare( const std::vector<baseType> &a, const std::vector<baseType> &b)
 {

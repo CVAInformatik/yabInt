@@ -638,6 +638,28 @@ void testModPow(){
     }
 }
 
+void debugFloat(){
+	yabFloatType a("1.25");
+  std::cout << " a " << fToA(a) << std::endl ;
+	yabFloatType b("1.0");
+  std::cout << " b " << fToA(b) << std::endl ;
+	yabFloatType a1("0.000025");
+  std::cout << " a1 " << fToA(a1) << std::endl ;
+	yabFloatType b1 = a;
+	             b1 += a1;
+  std::cout << " n1  " << fToA(b1) << std::endl ;
+	             b1 = a;
+	             b1 -= a1;
+  std::cout << " b1  " << fToA(b1) << std::endl ;
+	             b1 = a1;
+	             b1 += a;
+  std::cout << " b1  " << fToA(b1) << std::endl ;
+	             b1 = a1;
+	             b1 -= a;
+  std::cout << " b1  " << fToA(b1) << std::endl ;
+
+}
+
 void testFloat(){
 
 /*	
@@ -726,9 +748,22 @@ void testFloat(){
 	std::cout << " e7 " << fToA(e7) << std::endl ;
 	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
   e7 += e4;
-	std::cout << " e7 " << fToA(e7) << std::endl<< std::endl ;
+	std::cout << " e7 " << fToA(e7) << std::endl ;
 	std::cout << " e7 " << fToA(e7, -10) << std::endl ;
-	
+
+  yabFloatType f3("0.05");
+	std::cout << " f3 " << fToA(f3) << std::endl ;
+	std::cout << " f3 " << fToA(f3, -10) << std::endl ;
+
+  yabFloatType f4("0.05",64);
+	std::cout << " f4 " << fToA(f4) << std::endl ;
+	std::cout << " f4 " << fToA(f4, -10) << std::endl ;
+		
+	for( int i = 0 ; i <60 ; i++){
+	std::cout << " f4 " << fToA(f4,i) << std::endl ;
+	std::cout << " f4 " << fToA(f4, -i) << std::endl ;
+	}	
+
 	
 }
 
@@ -771,6 +806,93 @@ void testMersenne()
 	
 }
 
+
+
+void testDivision()
+{
+	/*
+	
+	  yabFloatType a0("1");
+	  
+	  yabFloatType a1("10");
+	  yabFloatType b1("0.1");
+	  yabFloatType a2("100");
+	  yabFloatType b2("0.01");
+	  yabFloatType a3("1000");
+	  yabFloatType b3("0.001");
+	  yabFloatType a4("10000");
+	  yabFloatType b4("0.0001");
+	  yabFloatType a5("100000");
+	  yabFloatType b5("0.00001");
+	  yabFloatType a6("1000000");
+	  yabFloatType b6("0.000001");
+	  yabFloatType a7("10000000");
+	  yabFloatType b7("0.0000001");
+	  
+	  yabFloatType c(a);
+	  c *= b;
+	  for(int i = 10; i < 50 ; i++){
+		std::cout << i << " a       " << fToA(a, i) << std::endl ;  
+		std::cout << i << " b       " << fToA(b, i) << std::endl ;  
+		std::cout << i << " a*b = c " << fToA(c, i) << std::endl ;  	
+		}
+*/	 
+	  yabFloatType a("500", 32);
+		std::cout << " a         " << fToA(a, 20) << std::endl ;  
+		std::cout << " 1/a       " << fToA(reciprocal(a), 20) << std::endl ;  
+			
+	  yabFloatType a0("1000", 32);	  
+		std::cout << " a0         " << fToA(a0, 20) << std::endl ;  
+		std::cout << " 1/a0       " << fToA(reciprocal(a0), 20) << std::endl ;  
+
+	  yabFloatType a1("2000", 32);
+		std::cout << " a1         " << fToA(a1, 20) << std::endl ;  
+		std::cout << " 1/a1       " << fToA(reciprocal(a1), 20) << std::endl ;  
+
+	  yabFloatType a2("2500", 32);
+		std::cout << " a2         " << fToA(a2, 20) << std::endl ;  
+		std::cout << " 1/a2       " << fToA(reciprocal(a2), 20) << std::endl ;  
+
+	  yabFloatType a20("2800", 32);
+		std::cout << " a20         " << fToA(a20, 20) << std::endl ;  
+		std::cout << " 1/a20       " << fToA(reciprocal(a20), 20) << std::endl ;  
+
+
+	  yabFloatType a3("3000", 32);
+		std::cout << " a3         " << fToA(a3, 20) << std::endl ;  
+		std::cout << " 1/a3       " << fToA(reciprocal(a3), 20) << std::endl ;  
+
+	  yabFloatType a40("0.001", 32);
+		std::cout << " a40         " << fToA(a40, 20) << std::endl ;  
+		std::cout << " 1/a40       " << fToA(reciprocal(a40), 20) << std::endl ;  
+
+
+	  yabFloatType a4("0.003", 32);
+		std::cout << " a4         " << fToA(a4, 20) << std::endl ;  
+		std::cout << " 1/a4       " << fToA(reciprocal(a4), 20) << std::endl ;  
+		    
+	  yabFloatType a5("0.004", 32);
+		std::cout << " a5         " << fToA(a5, 20) << std::endl ;  
+		std::cout << " 1/a5       " << fToA(reciprocal(a5), 20) << std::endl ;  
+			
+		yabFloatType m1("9472394.792")	;
+		yabFloatType m2("8977.04174")	;
+		std::cout << " m1 "  << fToA(m1, 20) << std::endl;
+		std::cout << " m2 "  << fToA(m2, 20) << std::endl;
+		yabFloatType m3;
+		m3 = m1 ;
+		m3 /= m2 ;
+		std::cout << " m1/m2 "  << fToA(m3, -40) << std::endl;
+		m3 = m1 ;
+		std::cout << " m3    "  << fToA(m3, -80) << std::endl;
+		m3 /= m1 ;
+		std::cout << " m1/m1 "  << fToA(m3, -80) << std::endl;
+		m3 = m2 ;
+		std::cout << " m3    "  << fToA(m3, -80) << std::endl;
+		m3 /= m2 ;
+		std::cout << " m2/m2 "  << fToA(m3, -80) << std::endl;
+}
+
 int main(int argc, char **argv)
 {
     //testDivRem();
@@ -789,9 +911,10 @@ int main(int argc, char **argv)
 		//testMontgomery();		
 		//testModExponent();
 		//testModPow();
-		testFloat();
+		//testFloat();
 		//testMersenne();
-
+		//debugFloat();
+		testDivision();
     
 	  return 0;
 	  

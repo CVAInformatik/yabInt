@@ -5,7 +5,8 @@
 #include "y.h"
 #include "f.h"
 
-
+//#define ALIGN 1  Right now I can see why it doesn't work
+// as I expected, will leave it alone for now 
 yabFloatType::yabFloatType(const char *s, unsigned int pf)
 {
 	
@@ -91,6 +92,24 @@ yabFloatType::yabFloatType(const char *s, unsigned int pf)
   			if( n.back() == 0 ) n.pop_back();
   	}
   }
+
+  
+  /* put the 'binary' point on a 'digit'- border  */
+#ifdef ALIGN  
+  
+  yabIntType testval(val);
+  unsigned long long testa = a;
+  while((testa %  yabIntType::DIGITSIZE) != 0)   	{
+  std::cout <<" a " << a << "  dump of val " ; dump(val.yabInt);
+  std::cout <<" testa " << testa << "  dump of testval " ; dump(testval.yabInt);
+  			testval <<= 1;
+  			testa++;  		
+  } 
+  a = testa;
+  val = testval;
+#else
+  //std::cout << "bitsize "  << BitSize(val)  <<" a " << a << "  dump of val " ; dump(val.yabInt);
+#endif
   if( neg ) val.ChangeSign();
 }
 
@@ -157,19 +176,17 @@ std::string Round( int _digits, std::string &in, std::string &frac )
 std::string fToA(const yabFloatType &a, int digits){
 	
 	static yabIntType intPart;
-	bool       neg = false ;
-	
+	std::string sign = "" ;
 
 	intPart = a.val ;
-	if(intPart.isNegative()) { neg = true; intPart.ChangeSign() ;}
+	if(intPart.isNegative()) { sign = "-" ; intPart.ChangeSign() ;}
 	
 	if( a.a)  intPart >>= a.a ;
 
-	if(neg)intPart.ChangeSign() ; 
-
 	std::string in( iToA(intPart))	;
+	
 
-	if(a.a == 0) return in ; // we have an integer
+	if(a.a == 0) return sign + in ; // we have an integer
 
    /* now we need convert the fractional part */
    /* we shift it LEFT, so the MSB (the first after the binary point)
@@ -185,9 +202,10 @@ std::string fToA(const yabFloatType &a, int digits){
    unsigned int shift = a.a % yabIntType::DIGITSIZE ;
    unsigned int dpos  	 =  (a.a/yabIntType::DIGITSIZE)+1 ;
    yabIntType frac(a.val);
-   if(neg)frac.ChangeSign() ; 
+   if(a.val.isNegative() )frac.ChangeSign() ; 
+//#ifndef ALIGN   	
    if(shift ) frac<<= (yabIntType::DIGITSIZE- shift);
-   
+//#endif   
    std::string fraction ;
    std::vector<baseType> rawBits = yabIntPeek(frac)	;
    std::vector<baseType> rawFrac ;
@@ -207,5 +225,96 @@ std::string fToA(const yabFloatType &a, int digits){
         rawBits = yabIntPeek(frac)	;
         fraction.push_back( rawBits[dpos] + '0');    
   	}
-  	return Round(digits, in, fraction);
+  	return sign + Round(digits, in, fraction);
 }
+
+
+	/*
+	         if a == b -> 0
+	         if a > b ->  1
+	         if a < b ->  -1
+	*/
+	int yabFloatCompare(const yabFloatType &a, const yabFloatType &b )	{
+		int res = 0;
+		yabFloatType t(a);
+		
+		t -= b ;
+		
+		if ( t.isZero() ) res = 0;
+		else if( t.isPositive() ) res = 1;
+		else res = -1;
+			
+		return res;
+	}
+
+
+		
+/* given a returns the value for initial guess of the reciprocal */
+	yabFloatType  guess(const yabFloatType& a){
+	      std::vector<baseType> temp = yabIntPeek(a.val)	;
+	      unsigned long long ain = a.a ;
+	      int bitsize = BitSize(temp);
+	      //std::cout << " bitsize " << bitsize << std::endl;
+	      yabIntType aVal(temp);	
+	      if(ain > bitsize){
+	      	   // number is smaller than 1
+	      	   aVal = 1;
+	      	   aVal <<= (ain - bitsize) +1 ;
+	      	   // ain is kept as is
+	      }
+	      else { // a <= bitsize
+		  	     //aVal is kept as is
+		  	     ain =  bitsize+10-ain  ;
+		  	}
+		  	yabFloatType c1("1.20");// best value 1.5 ?
+		  	yabFloatType _c1("1.10");
+		  	yabFloatType c2("0.80");// best value 0.75 ?
+		  	yabFloatType _c2("0.9");
+		  	yabFloatType res(aVal,ain);
+		  	do {
+           yabFloatType test;
+           test = res;
+           test *= a; 
+           int l1 = yabFloatCompare( c1,test);//  1 if c1 > test
+           int l2 = yabFloatCompare( c2,test);// -1 if c2 < test
+		  	
+		  	   if( (l1 * l2 ) == -1) break; 	// c1 > test && c2 < test 	  	
+		  	   if (l1 < 0 ) res *= _c2;
+           if (l2 > 0)  res *= _c1;
+		  	} while(true);
+		  	
+		  	return res;
+	}
+
+
+  
+	yabFloatType  reciprocal(const yabFloatType& f)
+	{
+		if(f.isZero()){
+			std::cout << " division by zero !!!!!!! " << std::endl;
+			return yabFloatType("0");
+		}
+		
+		yabFloatType Xnow(guess(f));
+		yabFloatType _Two("2");
+		yabFloatType  t1;
+
+		for(int i = 0; i < 10; i++) { // iterate 10 times for now
+			    //std::cout << "Xnow  " << fToA(Xnow,80) <<std::endl;
+          t1 = f ;
+			    //std::cout << "0: Xtemp  " << fToA(t1,30) <<std::endl;
+          t1 *= Xnow;
+			    //std::cout << "1: Xtemp*Xnow   " << fToA(t1,30) <<std::endl;
+          t1.ChangeSign();
+			    //std::cout << "2: -(Xtemp*Xnow)   " << fToA(t1,30) <<std::endl;
+          t1 += _Two;
+			    //std::cout << "3: 2-(Xtemp*Xnow)   " << fToA(t1,30) <<std::endl;
+          t1 *= Xnow ;
+			    //std::cout << "4: Xnow*( 2-(Xtemp*Xnow))   " << fToA(t1,30) <<std::endl;
+			    Xnow = t1;
+			    //std::cout << "5: new Xnow " << fToA(Xnow,40) <<std::endl;
+		};
+		
+		return Xnow;
+	}
+	
