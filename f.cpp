@@ -300,21 +300,74 @@ std::string fToA(const yabFloatType &a, int digits){
 		yabFloatType  t1;
 
 		for(int i = 0; i < 10; i++) { // iterate 10 times for now
-			    //std::cout << "Xnow  " << fToA(Xnow,80) <<std::endl;
           t1 = f ;
-			    //std::cout << "0: Xtemp  " << fToA(t1,30) <<std::endl;
           t1 *= Xnow;
-			    //std::cout << "1: Xtemp*Xnow   " << fToA(t1,30) <<std::endl;
           t1.ChangeSign();
-			    //std::cout << "2: -(Xtemp*Xnow)   " << fToA(t1,30) <<std::endl;
           t1 += _Two;
-			    //std::cout << "3: 2-(Xtemp*Xnow)   " << fToA(t1,30) <<std::endl;
           t1 *= Xnow ;
-			    //std::cout << "4: Xnow*( 2-(Xtemp*Xnow))   " << fToA(t1,30) <<std::endl;
 			    Xnow = t1;
-			    //std::cout << "5: new Xnow " << fToA(Xnow,40) <<std::endl;
 		};
 		
 		return Xnow;
 	}
 	
+	/*
+	        returns 1/<the squareroot of f>
+	        
+	        iteration step  is 
+	        
+	        Xnew = (Xold/2)(3 - f * Xold * Xold)
+	*/
+	yabFloatType  Wish(const yabFloatType& a){
+
+        yabIntType t((long) 3);
+        // here we do some guessing
+        std::vector<baseType> temp = yabIntPeek(a.val)	;
+	      unsigned long long ain = a.a ;
+	      int bitsize = BitSize(temp);
+	      
+	      //std::cout << " bitsize " << bitsize << " ain " << ain <<std::endl;
+	      if (bitsize > ain) // f >= 1
+	      	{
+	      	  ain = ((bitsize - ain)/2) +1 ;
+	      	}
+	      else {
+	      	t <<= ((ain-bitsize)/2) -1 ;
+	      	ain = 0;
+	      }
+        // we have a guess
+		  	yabFloatType res(t,ain);
+		  	
+	      //std::cout << " res " << fToA(res,20) << std::endl;
+
+		  	return res;
+
+		
+	}
+	
+	yabFloatType  reciprocalSquareRoot(const yabFloatType& f)
+	{
+		if(f.isZero()){
+			std::cout << " division by zero !!!!!!! " << std::endl;
+			return yabFloatType("0");
+		}
+		yabFloatType Xold;
+		yabFloatType three("3");
+		yabFloatType half("0.5");
+		
+		Xold = Wish(f);
+		
+		for( int i = 0 ; i < 10 ; i++ ){
+			 yabFloatType t;
+			 t = Xold ;
+			 t *= Xold;
+			 t *= f ;
+			 t.ChangeSign();
+			 t += three;
+			 t *= Xold;
+			 t *= half;
+			 Xold = t;
+		}
+		if (Xold.isNegative()) Xold.ChangeSign();
+		return Xold;
+	}

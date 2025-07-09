@@ -893,6 +893,43 @@ void testDivision()
 		std::cout << " m2/m2 "  << fToA(m3, -80) << std::endl;
 }
 
+void testSquareRoot()
+{
+		yabFloatType a("400", 32);
+		std::cout << " a         " << fToA(a, 20) << std::endl ;  
+		std::cout << " 1/<squareroot of a>       " << fToA(reciprocalSquareRoot(a), 20) << std::endl ;  
+
+		yabFloatType a1("500", 32);
+		std::cout << " a1         " << fToA(a1, 20) << std::endl ;  
+		std::cout << " 1/<squareroot of a1>       " << fToA(reciprocalSquareRoot(a1), 20) << std::endl ;  
+
+		yabFloatType a2("0.05", 32);
+		std::cout << " a2         " << fToA(a2, 20) << std::endl ;  
+		std::cout << " 1/<squareroot of a2>       " << fToA(reciprocalSquareRoot(a2), 20) << std::endl ;  
+
+		yabFloatType a3("9591651650165.6159759157", 32);
+		std::cout << " a3         " << fToA(a3, 20) << std::endl ;  
+		yabFloatType a31 = reciprocalSquareRoot(a3);
+		std::cout << " 1/<squareroot of a3>       " << fToA(a31, 20) << std::endl ;  
+		yabFloatType a32 = a3;
+		a32 *= a31;
+		std::cout << " a3 * 1/<squareroot of a3>       " << fToA(a32, 20) << std::endl ;  
+    a32 *= a32;			
+		std::cout << " square(a3 * 1/<squareroot of a3>)       " << fToA(a32, 20) << std::endl ;  
+
+
+		yabFloatType a4("959165314463116113131131331650165.6154654619759157", 32);
+		std::cout << " a4         " << fToA(a4, 20) << std::endl ;  
+		yabFloatType a41 = reciprocalSquareRoot(a4);
+		std::cout << " 1/<squareroot of a4>       " << fToA(a41, 20) << std::endl ;  
+		yabFloatType a42 = a4;
+		a42 *= a41;
+		std::cout << " a4 * 1/<squareroot of a4>       " << fToA(a42, 20) << std::endl ;  
+    a42 *= a42;			
+		std::cout << " square(a3 * 1/<squareroot of a3>)       " << fToA(a42, 20) << std::endl ;  
+			
+}
+
 int main(int argc, char **argv)
 {
     //testDivRem();
@@ -914,7 +951,8 @@ int main(int argc, char **argv)
 		//testFloat();
 		//testMersenne();
 		//debugFloat();
-		testDivision();
+		//testDivision();
+		testSquareRoot();
     
 	  return 0;
 	  

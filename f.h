@@ -31,6 +31,7 @@ class yabFloatType;
 */
 std::string fToA(const yabFloatType &a, int digits = 10 ) ; 
 yabFloatType  reciprocal(const yabFloatType& f);
+yabFloatType  reciprocalSquareRoot(const yabFloatType& f);
 
 class yabFloatType
 {
@@ -146,6 +147,7 @@ public:
 	friend std::string fToA(const yabFloatType &a, int digits ) ; 
 	friend int yabFloatCompare(const yabFloatType &a, const yabFloatType &b );
 	friend yabFloatType  guess(const yabFloatType& a);
+	friend yabFloatType  Wish(const yabFloatType& a);
 	
 private:
 	
