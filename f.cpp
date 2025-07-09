@@ -185,7 +185,6 @@ std::string fToA(const yabFloatType &a, int digits){
 
 	std::string in( iToA(intPart))	;
 	
-
 	if(a.a == 0) return sign + in ; // we have an integer
 
    /* now we need convert the fractional part */
