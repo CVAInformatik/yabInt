@@ -32,6 +32,7 @@ class yabFloatType;
 std::string fToA(const yabFloatType &a, int digits = 10 ) ; 
 yabFloatType  reciprocal(const yabFloatType& f);
 yabFloatType  reciprocalSquareRoot(const yabFloatType& f);
+yabFloatType  SquareRoot(const yabFloatType& f);
 
 class yabFloatType
 {

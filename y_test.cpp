@@ -927,6 +927,13 @@ void testSquareRoot()
 		std::cout << " a4 * 1/<squareroot of a4>       " << fToA(a42, 20) << std::endl ;  
     a42 *= a42;			
 		std::cout << " square(a3 * 1/<squareroot of a3>)       " << fToA(a42, 20) << std::endl ;  
+
+		yabFloatType a5("959165314463116113131131331650165.6154654619759157", 32);
+		std::cout << " a5         " << fToA(a5, 20) << std::endl ;  
+		yabFloatType a51 = SquareRoot(a5);
+		std::cout << " squareroot of a5       " << fToA(a51, 20) << std::endl ;  
+		 a51 *= a51;
+		std::cout << " a5 * a5    " << fToA(a5, 20) << std::endl ;  
 			
 }
 

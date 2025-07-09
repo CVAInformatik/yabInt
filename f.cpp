@@ -371,3 +371,11 @@ std::string fToA(const yabFloatType &a, int digits){
 		if (Xold.isNegative()) Xold.ChangeSign();
 		return Xold;
 	}
+
+	yabFloatType  SquareRoot(const yabFloatType& f)
+	{
+		 yabFloatType res;
+		 res = reciprocalSquareRoot(f);
+		 res *= f;
+		 return res;
+	}
