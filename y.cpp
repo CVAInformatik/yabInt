@@ -373,7 +373,10 @@ void internalDivPow2(unsigned int _p, std::vector<baseType> &a)
    if (digits && (a.size() >= digits)) {
    	   for (unsigned int i = digits; i < a.size(); i++) a[i-digits] = a[i];
    	   for (unsigned int i = 0; i < digits; i++) a.pop_back();
-   	}
+   } else
+   {
+   	 a.clear();
+   }
 
    p = p % yabIntType::DIGITSIZE;
    while ( p--){
