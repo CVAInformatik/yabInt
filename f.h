@@ -29,6 +29,10 @@ class yabFloatType;
 		(No particular reason for this choice, apart from convenience.)
     
 */
+
+//
+//   Usefull functions ( reciprocal is used in the /= operator )
+// 
 std::string fToA(const yabFloatType &a, int digits = 10 ) ; 
 yabFloatType  reciprocal(const yabFloatType& f);
 yabFloatType  reciprocalSquareRoot(const yabFloatType& f);
@@ -58,7 +62,7 @@ public:
 		 
 	~yabFloatType() {val = 0 ;} ;
 
-	yabFloatType& operator=(const yabFloatType& f){ if (&f == this) return *this;
+	inline yabFloatType& operator=(const yabFloatType& f){ if (&f == this) return *this;
 		                                       	else {
 		                                       		val = f.val ; 
 		                                       		a   = f.a;
@@ -66,7 +70,7 @@ public:
 		                                       	};
 																					}
 																					
-	yabFloatType& operator+=( const yabFloatType& f){
+	inline yabFloatType& operator+=( const yabFloatType& f){
 		      yabIntType t ; 
 		      if( a < f.a ) { //
 				      t =  val;		      
@@ -87,7 +91,7 @@ public:
       	  return *this;
 	};
 	
-	yabFloatType& operator-=( const yabFloatType& f){
+	inline yabFloatType& operator-=( const yabFloatType& f){
 		      yabIntType t ; 
 		      if( a < f.a ) { //
 				      t =  val;		      
@@ -109,12 +113,12 @@ public:
       	  return *this;
 	};
 
-	yabFloatType& operator*=( const yabFloatType& f) {
+	inline yabFloatType& operator*=( const yabFloatType& f) {
 		                 val *= f.val;
 		                 a += f.a ;
 // performance  optimization
 //std::cout << " bitsize(val), a  " <<	BitSize(val) << "  " << a << std::endl;
-// adjust for performance, it works without, but gets slow for som
+// adjust for performance, it works without, but gets slow for some arguments
 #define MAXMULT 10000    	
 #ifdef MAXMULT
                         /* we drop Least Significan bits */
@@ -130,14 +134,42 @@ public:
 		                 return *this;
 	};
 
-	yabFloatType& operator/=( const yabFloatType& f) {
+	inline yabFloatType& operator/=( const yabFloatType& f) {
 		                 yabFloatType rec(reciprocal(f));		                 
 		                 val *= rec.val;
 		                 a += rec.a ;
 		                 return *this;
 	};
+	
+  inline yabFloatType operator+(const yabFloatType &r)
+	{
+    yabFloatType ret(*this);
+    ret+=r;
+    return ret;
+	} 
 
-  void ChangeSign(){ 
+  inline yabFloatType operator-(const yabFloatType &r)
+	{
+    yabFloatType ret(*this);
+    ret-=r;
+    return ret;
+	} 
+	
+	inline yabFloatType operator*(const yabFloatType &r)
+	{
+    yabFloatType ret(*this);
+    ret*=r;
+    return ret;
+	} 
+
+	inline yabFloatType operator/(const yabFloatType &r)
+	{
+    yabFloatType ret(*this);
+    ret/=r;
+    return ret;
+	} 
+
+  inline void ChangeSign(){ 
 		val.ChangeSign(); 
 	};
 	
@@ -156,3 +188,5 @@ private:
 	yabIntType val;
 	unsigned long long a ;
 };
+
+
