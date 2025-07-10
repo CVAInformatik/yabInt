@@ -173,13 +173,15 @@ std::string Round( int _digits, std::string &in, std::string &frac )
 	return std::string("test");
 }	
 
-std::string fToA(const yabFloatType &a, int digits){
+std::string fToA(const yabFloatType &_a, int digits){
 	
 	static yabIntType intPart;
 	std::string sign = "" ;
+	yabFloatType a(_a);	
+
+	if(a.isNegative()) { sign = "-" ; a.ChangeSign() ;}
 
 	intPart = a.val ;
-	if(intPart.isNegative()) { sign = "-" ; intPart.ChangeSign() ;}
 	
 	if( a.a)  intPart >>= a.a ;
 
@@ -201,9 +203,12 @@ std::string fToA(const yabFloatType &a, int digits){
    unsigned int shift = a.a % yabIntType::DIGITSIZE ;
    unsigned int dpos  	 =  (a.a/yabIntType::DIGITSIZE)+1 ;
    yabIntType frac(a.val);
-   if(a.val.isNegative() )frac.ChangeSign() ; 
+
 //#ifndef ALIGN   	
-   if(shift ) frac<<= (yabIntType::DIGITSIZE- shift);
+//   std::cout << " a.a " << a. a << " a.val.yabInt.size() " << a.val.yabInt.size() << "  shift "	 << shift << " dpos "<< dpos  << std::endl;
+//   std::cout << "frac "	 << iToA(frac) << std::endl;
+   if(shift ) frac<<= (yabIntType::DIGITSIZE - shift);
+//   std::cout << "frac "	 << iToA(frac) << std::endl;
 //#endif   
    std::string fraction ;
    std::vector<baseType> rawBits = yabIntPeek(frac)	;

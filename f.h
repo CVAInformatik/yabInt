@@ -115,8 +115,9 @@ public:
 // performance  optimization
 //std::cout << " bitsize(val), a  " <<	BitSize(val) << "  " << a << std::endl;
 // adjust for performance, it works without, but gets slow for som
-#define MAXMULT 4000    	
+#define MAXMULT 10000    	
 #ifdef MAXMULT
+                        /* we drop Least Significan bits */
                        	{
                        		while (( a > MAXMULT) && (BitSize(val) > MAXMULT/2)){
                        			{

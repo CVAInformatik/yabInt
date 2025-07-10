@@ -895,10 +895,11 @@ void testDivision()
 
 void testSquareRoot()
 {
-		yabFloatType a("400", 32);
+
+		yabFloatType a("4000000000000000000", 32);
 		std::cout << " a         " << fToA(a, 20) << std::endl ;  
 		std::cout << " 1/<squareroot of a>       " << fToA(reciprocalSquareRoot(a), 20) << std::endl ;  
-
+	
 		yabFloatType a1("500", 32);
 		std::cout << " a1         " << fToA(a1, 20) << std::endl ;  
 		std::cout << " 1/<squareroot of a1>       " << fToA(reciprocalSquareRoot(a1), 20) << std::endl ;  
@@ -919,14 +920,16 @@ void testSquareRoot()
 
 
 		yabFloatType a4("959165314463116113131131331650165.6154654619759157", 32);
-		std::cout << " a4         " << fToA(a4, 20) << std::endl ;  
+		std::cout << " a4                                " << fToA(a4, 100) << std::endl ;  
 		yabFloatType a41 = reciprocalSquareRoot(a4);
-		std::cout << " 1/<squareroot of a4>       " << fToA(a41, 20) << std::endl ;  
+		std::cout << " 1/<squareroot of a4>       " << fToA(a41, 100) << std::endl ;  
+
+		
 		yabFloatType a42 = a4;
 		a42 *= a41;
-		std::cout << " a4 * 1/<squareroot of a4>       " << fToA(a42, 20) << std::endl ;  
+		std::cout << " a4 * 1/<squareroot of a4>       " << fToA(a42, 100) << std::endl ;  
     a42 *= a42;			
-		std::cout << " square(a3 * 1/<squareroot of a3>)       " << fToA(a42, 20) << std::endl ;  
+		std::cout << " square(a4 * 1/<squareroot of a4>) " << fToA(a42, 100) << std::endl ;  
 
 		yabFloatType a5("959165314463116113131131331650165.6154654619759157", 32);
 		std::cout << " a5         " << fToA(a5, 20) << std::endl ;  
