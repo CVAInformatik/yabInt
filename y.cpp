@@ -58,7 +58,7 @@ yabIntType& yabIntType::operator=(long long _i){
 
 		
 yabIntType::yabIntType(const char *c) {
-  
+
 	std::vector<baseType> temp ;
 	char *b = (char *)c ;
 	int sign = 0;
@@ -78,7 +78,6 @@ yabIntType::yabIntType(const char *c) {
 	 	}
 	 	b++;
 	}
-  
 	while(yabInt.size() && (yabInt.back() == 0)) yabInt.pop_back();
 		
 	if( sign < 0 ) changeSign(yabInt);
@@ -842,6 +841,7 @@ std::string _iToA(const yabIntType &a ) {
 	
 void mkDivisors( unsigned int targetsize, unsigned int startSize,yabIntType first,   std::vector< yabIntType> &stack)	
 {
+
 	   if(startSize < targetsize) {
 	   	   yabIntType t(first);
 	   	   t *= first;
@@ -857,19 +857,23 @@ void  fastItoAaux( unsigned int level, yabIntType Int, std::vector< yabIntType> 
 		yabIntType quotient = Int;
 		yabIntType remainder;
  
+
 	 if(level == divStack.size())
 	 	   {	 	   	
 	 	   	std::string t = _iToA( Int);	 		 	   	
+    		//std::cout << "1 level "<<level<< " res>"  << res << "< t >" << t << "<" <<std::endl;
 	 	   	while (t.length() < sz)	t.push_back('0');
 	 	   	res = res + t;
-	 	  }
-	 else
- 			do{
+    	}
+	 else {
 				yabIntType t = quotient;			
-				DivRem(t, divStack[level], quotient, remainder);
+
+		  	DivRem(t, divStack[level], quotient, remainder);
+			  
 				fastItoAaux(level+1, remainder, divStack, sz, res);
-			 }
-			while (!quotient.isZero()); 	 	
+				fastItoAaux(level+1, quotient, divStack, sz, res);
+	 }
+
 }
 
 std::string fastItoA( yabIntType _Int)
@@ -883,6 +887,14 @@ std::string fastItoA( yabIntType _Int)
 		if(_Int.isNegative()) Int.ChangeSign();
 		
  		mkDivisors(BitSize(Int)/2, BitSize(divisor), divisor, divStack);
+#if 0 		
+ 		divStack.push_back( yabIntType(1)); 		
+ 		std::cout << "divStack size " << divStack.size() << std::endl;
+ 		for( int i = 0 ; i < divStack.size(); i++){	
+ 			yabIntType t = divStack[i];
+ 		  std::cout << "divStack[" << i<< "]  " << t.yabInt.size()  << std::endl;
+ 		}
+#endif 		
 		std::string result ;	result.clear();
 		fastItoAaux(0, Int, divStack, _divisor.length()-1, result );
 
@@ -892,6 +904,7 @@ std::string fastItoA( yabIntType _Int)
 		return result;		
 }
 
+//#define STRINGLIMIT 100
 #define STRINGLIMIT 100
 
 std::string iToA(const yabIntType &a ) 
