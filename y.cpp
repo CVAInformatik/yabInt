@@ -372,9 +372,6 @@ void internalDivPow2(unsigned int _p, std::vector<baseType> &a)
    if (digits && (a.size() >= digits)) {
    	   for (unsigned int i = digits; i < a.size(); i++) a[i-digits] = a[i];
    	   for (unsigned int i = 0; i < digits; i++) a.pop_back();
-   } else
-   {
-   	 a.clear();
    }
 
    p = p % yabIntType::DIGITSIZE;
@@ -521,11 +518,11 @@ function extended_gcd(a, b)
     
     while r ? 0 do
         quotient := old_r div r
-        (old_r, r) := (r, old_r - quotient × r)
-        (old_s, s) := (s, old_s - quotient × s)
-        (old_t, t) := (t, old_t - quotient × t)
+        (old_r, r) := (r, old_r - quotient Ã— r)
+        (old_s, s) := (s, old_s - quotient Ã— s)
+        (old_t, t) := (t, old_t - quotient Ã— t)
     
-    output "Bézout coefficients:", (old_s, old_t)
+    output "BÃ©zout coefficients:", (old_s, old_t)
     output "greatest common divisor:", old_r
     output "quotients by the gcd:", (t, s)
 */
@@ -543,21 +540,21 @@ void extendedGCD(const yabIntType &a, const yabIntType &b, yabIntType &gcd, yabI
 		 yabIntType quotient ;
 		 yabIntType rem;
 		 DivRem( old_r, r, quotient, rem);
-		 { // (old_r, r) := (r, old_r - quotient × r)
+		 { // (old_r, r) := (r, old_r - quotient Ã— r)
 		 	  yabIntType temp_oldr(old_r);
 		 	  old_r = r;
 		 	  r *= quotient ;
 		 	  r.ChangeSign();
 		 	  r += temp_oldr;		 	  
 		 }
-		 { // (old_s, s) := (s, old_s - quotient × s)
+		 { // (old_s, s) := (s, old_s - quotient Ã— s)
 		 	 yabIntType temp_olds(old_s);
 		 	 old_s = s;
 		 	 s *= quotient;
 		 	 s.ChangeSign();
 		 	 s +=  temp_olds;
 		 }
-		 { //  (old_t, t) := (t, old_t - quotient × t)
+		 { //  (old_t, t) := (t, old_t - quotient Ã— t)
 		 	  yabIntType temp_oldt(old_t);
 		 	  old_t = t;
 		 	  t *= quotient;
