@@ -1,7 +1,7 @@
 
 CC = g++
 CFLAGS = -g 
-CPPFLAGS =  -O1  
+CPPFLAGS =  -O2  
 
 %.o  :  %.cpp
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@

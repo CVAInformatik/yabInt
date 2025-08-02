@@ -1,13 +1,13 @@
 
-
+#include <cmath>
 #include <iostream>
 #include "y.h"
 #include "m.h"
 #include "f.h"
 
-//#include "yabInt.cpp"
-
 #include <time.h>
+
+#include "chudnovsky.cpp"
 
  void testMersenneAux(unsigned int x)
 {
@@ -924,7 +924,7 @@ void testSquareRoot()
 		yabFloatType a41 = reciprocalSquareRoot(a4);
 		std::cout << " 1/<squareroot of a4>       " << fToA(a41, 100) << std::endl ;  
 
-		
+		 
 		yabFloatType a42 = a4;
 		a42 *= a41;
 		std::cout << " a4 * 1/<squareroot of a4>       " << fToA(a42, 100) << std::endl ;  
@@ -934,10 +934,179 @@ void testSquareRoot()
 		yabFloatType a5("959165314463116113131131331650165.6154654619759157", 32);
 		std::cout << " a5         " << fToA(a5, 20) << std::endl ;  
 		yabFloatType a51 = SquareRoot(a5);
-		std::cout << " squareroot of a5       " << fToA(a51, 20) << std::endl ;  
+		std::cout << " a5 = squareroot of a5       " << fToA(a51, 20) << std::endl ;  
 		 a51 *= a51;
 		std::cout << " a5 * a5    " << fToA(a5, 20) << std::endl ;  
 			
+}
+
+/*
+       Gauss-Legendre Iteration for Pi
+*/
+void pi(int iterations)
+{
+		yabFloatType a0("1", 32);
+		std::cout << " a0 " << fToA(a0, 100) << std::endl ;  
+		yabFloatType b2("2", 32);
+		yabFloatType  b0 = reciprocalSquareRoot(b2);
+		std::cout << " b0 " << fToA(b0, 100) << std::endl ;  
+		yabFloatType  p0("1");
+		yabFloatType  t0("0.25");
+
+  	yabFloatType anext;
+  	yabFloatType b1;
+	  yabFloatType bnext;
+	  yabFloatType pnext;
+	  yabFloatType tnext;
+	  yabFloatType diff ;
+	  
+	  for(int i = 0; i < iterations; i++){
+	  	anext = a0;
+	  	b1    = a0;
+	  	anext += b0;
+	  	anext /= b2;
+	  	std::cout << "anext  "<<fToA(anext, 100) <<std::endl;
+
+	  	b1 *= b0;
+ 			std::cout << " b1 " << fToA(b1, 100) << std::endl ;  
+	  	std::cout << "now squareroot "<< std::endl;
+	  	bnext = SquareRoot( b1);
+	  	std::cout << "after squareroot "<< std::endl;
+	  	pnext = p0;
+	  	pnext *= b2;
+	  	std::cout << "pnext  "<<fToA(pnext, 100) <<std::endl;
+	  	tnext = t0 ;
+	  	diff  = anext;
+	  	std::cout << "1 diff  "<<fToA(diff, 100) <<std::endl;
+	  	diff -= a0;
+	  	std::cout << "2 diff  "<<fToA(diff, 100) <<std::endl;
+	  	diff *= diff ;
+	  	std::cout << "3 diff  "<<fToA(diff, 100) <<std::endl;
+	  	diff *= p0;
+	  	std::cout << "4 diff  "<<fToA(diff, 100) <<std::endl;
+	  	tnext -= diff;
+	  	std::cout << "tnext  "<<fToA(tnext, 100) <<std::endl;
+	  	a0 = anext;
+	  	b0 = bnext;
+	  	p0 = pnext;
+	  	t0 = tnext;
+	  yabFloatType sum;
+	  sum =  a0;
+	  sum += b0;
+	  sum *= sum;
+	  yabFloatType div;
+	  div  = t0;
+	  div += div;
+	  div += div;
+	  yabFloatType pi;
+	  pi = sum;
+	  pi /=  div;
+	  std::cout << std::endl << " iterations " << i << " PI " << fToA(pi, 500) << std::endl << std::endl ;  
+	  	
+	  }	
+	  /* print result */
+	  yabFloatType sum;
+	  sum =  a0;
+	  sum += b0;
+	  sum *= sum;
+	  yabFloatType div;
+	  div  = t0;
+	  div += div;
+	  div += div;
+	  yabFloatType pi;
+	  pi = sum;
+	  pi /=  div;
+	  std::cout << " iterations " << iterations << " PI " << fToA(pi, 500) << std::endl ;  
+	
+
+}
+
+void testSSMul(){
+	yabIntType a("600");
+	yabIntType b("100000000");
+	yabIntType res((int) 0);
+#if 1
+	std::cout << " SchStrMultiply " <<  iToA(a) << std::endl ;  
+	std::cout << " SchStrMultiply " <<  iToA(b) << std::endl ;  
+	std::cout << " SchStrMultiply " <<  iToA(res) << std::endl ;  
+	res = SchStrMultiply(a,b);
+	std::cout << " SchStrMultiply " <<  iToA(res) << std::endl ; 
+	for(int i = 0; i < 200 ; i++){ 
+		//std::cout << i << " SchStrMultiply 1 " <<  iToA(res) << std::endl ; 
+		//std::cout << i << " SchStrMultiply 2 " <<  iToA(b) << std::endl ;  
+		a = SchStrMultiply(res,b);
+   	std::cout << i << " SchStrMultiply 5 " <<  iToA(a) << std::endl ;  
+		res = a;
+	}
+#else
+	std::string qstr("6000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+	const char *cqstr = "6000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+	yabIntType q(qstr);
+	yabIntType cq(cqstr);
+	std::cout<<" qstr " << qstr << std::endl ;
+	//std::cout<<" iToA(q) " << iToA(q) << std::endl ;
+	std::cout<<" cqstr " << cqstr << std::endl ;
+	//std::cout<<" iToA(cq) " << iToA(cq) << std::endl ;
+	a =	SchStrMultiply(q, b);
+	std::cout<<" a " << iToA(a) << std::endl ;
+	std::cout<<" a " << iToA(SchStrMultiply(q, b)) << std::endl ;
+#endif
+}
+
+void testSSMul2(){
+	
+	std::string astr("1");
+	std::string bstr("6");
+	yabIntType a(astr);
+	yabIntType b(bstr);
+	yabIntType res;
+	for(int i = 0; i < 100 ; i++){
+		astr = astr + "0";
+		yabIntType a(astr);
+	  res =	SchStrMultiply(a, b);
+		std::cout<< i << " res:  " << iToA(res) << std::endl;
+	}
+}
+
+void testItoA(){
+	std::string a1str("11111111111111");
+	std::string a2str("22222222222222");
+	std::string a3str("33333333333333");
+	std::string a4str("44444444444444");
+	std::string a5str("55555555555555");
+	std::string a6str("66666666666666");
+	std::string a7str("77777777777777");
+	std::string a8str("88888888888888");
+	std::string a9str("99999999999999");
+	std::string a0str("00000000000000");
+	std::string astr("");
+	astr += a1str; 
+	yabIntType a(astr); std::cout << iToA(a) << std::endl;
+	astr += a2str;
+	yabIntType b(astr);  std::cout << iToA(b) << std::endl;
+	astr += a3str;
+	yabIntType c(astr);  std::cout << iToA(c) << std::endl;
+	astr += a4str;
+	yabIntType d(astr);  std::cout << iToA(d) << std::endl;
+	astr += a5str;
+	yabIntType e(astr);  std::cout << iToA(e) << std::endl;
+	astr += a6str;
+	yabIntType f(astr);  std::cout << iToA(f) << std::endl;
+	astr += a7str;
+	yabIntType g(astr);  std::cout << iToA(g) << std::endl;
+	astr += a8str;
+	yabIntType h(astr);   std::cout << iToA(h) << std::endl;
+	astr += a9str;
+	yabIntType i(astr);   std::cout << iToA(i) << std::endl;
+	astr += a0str;
+	yabIntType j(astr);
+  std::cout << iToA(j) << std::endl;
+  for(int ix =0; ix< 30; ix++){
+  	astr += a0str;
+  	yabIntType temp(astr);
+  	std::cout<< " ix "<< ix<< "  " << iToA(temp) << std::endl;
+  }
+	
 }
 
 int main(int argc, char **argv)
@@ -962,8 +1131,13 @@ int main(int argc, char **argv)
 		//testMersenne();
 		//debugFloat();
 		//testDivision();
-		testSquareRoot();
-    
+		//testSquareRoot();
+    //pi(10);
+    Chudnovsky();
+    //testSSMul();
+    //testSSMul2();
+    //testItoA();
+    //TestSquareRoots();
 	  return 0;
 	  
 }
