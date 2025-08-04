@@ -1,9 +1,10 @@
 
 #include "f.h"
 
+
 yabIntType guess( const yabIntType &n)
 {
-	  std::vector<baseType> t = yabIntPeek(n);
+	    std::vector<baseType> t = yabIntPeek(n);
 	  yabIntType res (n)	;
 	  if(t.size() == 1 ) {
 	  	 t[0] = (int) sqrt((double ) t[0]);
@@ -26,7 +27,6 @@ yabIntType guess( const yabIntType &n)
 	  	  std::cout << "sz " << sz << " bitsize(res) " << BitSize(res)   << std::endl;
     }
 	  return res;	
-		
 }
 /* SLOW ! */
 yabIntType IntSquareRoot( const yabIntType &n, const yabIntType &one )
@@ -48,51 +48,114 @@ yabIntType IntSquareRoot( const yabIntType &n, const yabIntType &one )
 
 }
 
+/* 
+   highly specialised SquareRoot function for this application
+   not a general solutin !!
+   
+   we are using the fact that we know the argument is
+   10005 followed by a lot of zeroes 
+   
+   it means, broadly the first digits in the Squareroot are either
+   
+      10002 if the numbers of zeroes after the 5 is even
+      31630 if the numbers of zeroes after the 5 is odd
+   
+   parameter 'one' is a power of ten, and we kan find the power based on the number
+   of trailing zeroes (because 10^P = (2x5)^P = 2^P x 5^P )
+   ( by counting how many times we can right shift 'one' to the right)
+   
+*/
 
-yabIntType guess1( const yabIntType &n,const yabIntType &one )
+yabIntType IntSquareRoot1( const yabIntType &n, const yabIntType &one )
 {
-        yabIntType t(n);
-        yabIntType res;
-        // here we do some guessing
-        t *= one;
-        std::vector<baseType> temp = yabIntPeek(n)	;
-	      int bitsize = BitSize(temp);
-
-	  return res;	
-}
-
-yabIntType IntReciprocalSquareRoot1( const yabIntType &n, const yabIntType &one )
-{
-	  yabIntType dummy;
+   std::vector<baseType>  one_bits = yabIntPeek(one);
+   yabIntType temp_one(one)	;
+   int power = 0 ;
+   while(temp_one.isEven())	 {
+   	temp_one >>= 1; power++ ;
+   		power++;
+   		temp_one >>= 1;
+   }
+   yabIntType candidate;
+   unsigned int bias = 0;
+   yabIntType candidate0("10002499687578100594479218787636");
+   yabIntType candidate1("1000249968757810059447921878763577780015950243686963146571355115696509678538643042923111879484999732");
+   if (power < 4000 ){
+   	  candidate = candidate0;
+   	  bias = 29;
+   	}
+   else {
+   	  candidate = candidate1;
+   	  bias = 97;
+   	}
+   std::cout << "power " << power << std::endl;
+   for(int i = 0 ; i < ((power/2)-bias) ; i++){
+   	  yabIntType t1 = candidate;
+   	  yabIntType t2 = candidate;
+   	  t1 <<= 1;
+   	  t2 <<= 3;
+   	  candidate = t1;
+   	  candidate += t2;
+   }	
+   std::cout << "candidate " << iToA(candidate) << std::endl;
+   candidate *= candidate;
+   std::cout << "candidate * candidate " << iToA(candidate) << std::endl;
+   std::cout << " n                    " << iToA(n) << std::endl;
+#define NEWTONRAPHSON
+//#define FASTINVERSESQUAREROOT 
+#ifdef NEWTONRAPHSON   
+   /* now we have starting value  in candidate */
+   	yabIntType dummy;
 	  yabIntType x;
 	  yabIntType n_one(n);
-	  yabIntType three_one((int)3);
-	  x = guess(n);
+	  x = candidate;
 	  n_one *= one; 
-	  three_one *= one;
 	  while(1) {
 	  	yabIntType x_old = x;
 		  yabIntType t(n_one);
-		  t *= x_old ;
-		  t *= x_old ;
-		  x = three_one;
-		  x  -= t ;
-		  x  *= x_old;
+	  	DivRem( t, x_old, t, dummy);
+		  x += t;
 	  	x >>= 1;
 	  	if( x == x_old) break;
 	  }
 	  return x;
+#endif
+#ifdef FASTINVERSESQUAREROOT 
+    unsigned int scalefactor = (power * 2 *4 );
+    yabIntType scalefactorInt((int) 1);
+    scalefactorInt <<= scalefactor;
+    std::cout << "scalefactorInt " << iToA(scalefactorInt) << std::endl;
+    yabIntType reciprocalSqrt, dummy ;
+    DivRem( scalefactorInt,candidate, reciprocalSqrt, dummy);
+    // we  now iterate for a solution of the reciprocalSquareroot
+    yabIntType xold = reciprocalSqrt ;
+    yabIntType three ((int)3);
+    yabIntType t1;
+    while (1) {
+    	t1 = xold ;//scaled
+    	t1 *= xold ; //scaled
+    	t1 *= n ;  //not scaled 
+    	t1 >>= scalefactor ; // we remove the two scales
+    	t1 >>= scalefactor ;          	
+    	t1.ChangeSign();
+    	t1 += three;
+    	t1 *= xold; //scaled
+    	t1 >>= 1 ;// divide by two
+    	if( t1 == xold) break;
+    	xold = t1 ;
+	    std::cout << "xold " << iToA(xold) << std::endl;
+    }
+    /* now t1 is  the scalefactorInt/squareroot(n) */
+    t1 *= one ;
+    t1 >>= scalefactor ;
+    /* now t1 is  one/squareroot(n)  */
+    /* result is n * reciprocalSquareroot(n) */
+    yabIntType res = n;
+    res *= t1 ;
+    std::cout << " res " << iToA(res) << std::endl;
+    return res ;
+#endif
 
-}
-
-yabIntType IntSquareRoot1( const yabIntType &n, const yabIntType &one )
-{
-	  yabIntType n_one(n);
-	  n_one *= one; 
-	 yabFloatType nf( n_one,0);
-	 std::cout << "IntSquareRoot1 " <<  fToA(nf, 100000)<< std::endl;
-   yabFloatType res = SquareRoot(nf);
-   	return res.fToYabInt();
 }
 
 
@@ -106,7 +169,8 @@ void Chudnovsky()
 	                "0000000000" "0000000000"
 	            );
   yabIntType one ((int) 1);
-#define R 21
+#define R 30
+	std::cout << " R "  << R << std::endl ;
   for( int i = 0 ; i < R; i++) one *= _one;
 	yabIntType a_k(one);
 	yabIntType a_sum(one);
@@ -160,10 +224,13 @@ void Chudnovsky()
 	yabIntType t8("426880");
 	yabIntType t9("10005");
 	t9 *= one;
+	
 	std::cout << " t9 " << iToA(t9)<< std::endl ;
 	std::cout << "IntSquareRoot begin" << std::endl;
-	yabIntType t10 = IntSquareRoot( t9, one);
+	yabIntType t10 = IntSquareRoot1( t9, one);
 	std::cout << "IntSquareRoot done" << std::endl;
+	std::cout << " squareroot t9 " << iToA(t10) << std::endl;	
+	//return;
 	t10 *= t8;
 	t10 *= one;
 	yabIntType pi;
@@ -181,13 +248,14 @@ void TestSquareRoots()
 	                 "0000000000" "0000000000"
 	            );
   yabIntType one ((int) 1);
-#define R1 18
+#define R1 1
   for( int i = 0 ; i < R1; i++) one *= _one;
 
   yabIntType val("10005");
   val *= one;
   yabIntType res;
-  res = IntSquareRoot(val, one);
+  res = IntSquareRoot1(val, one);
+  return;
   //res = IntSquareRoot1(val, one);
   yabIntType test(res);
   test *= res ;
