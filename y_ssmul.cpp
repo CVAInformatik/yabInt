@@ -6,10 +6,10 @@
 #include "y_ssmul.h"
 
 
-#include "../temperton/FFTBase.h"
-#include "../temperton/simpleRadix2IOIPFFTindex.h"
-#include "../temperton/simple32NIOIPFFT.h"
-#include "../temperton/FFTClass.h"
+#include "FFTBase.h"
+#include "simpleRadix2IOIPFFTindex.h"
+#include "simple32NIOIPFFT.h"
+#include "FFTClass.h"
 
 
 #define RMOD3 1024
